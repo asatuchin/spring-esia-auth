@@ -99,7 +99,7 @@ public class EsiaIdentityValidationService {
         }
     }
 
-    private EsiaJwtPayload getPayload(final String token) throws JwtParsingException {
+    public EsiaJwtPayload getPayload(final String token) throws JwtParsingException {
         try {
             String payloadString = new String(
                     Base64.getDecoder().decode(token.split("\\.")[1]),

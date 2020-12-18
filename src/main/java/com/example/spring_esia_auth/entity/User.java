@@ -15,9 +15,10 @@ import javax.persistence.Id;
 import java.util.Collection;
 import java.util.Collections;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
+@Builder
 @Entity(name = "Users")
 public class User implements UserDetails {
 
