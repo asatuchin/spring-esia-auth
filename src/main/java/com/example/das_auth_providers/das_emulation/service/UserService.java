@@ -1,33 +1,37 @@
 package com.example.das_auth_providers.das_emulation.service;
 
 import com.example.das_auth_providers.das_emulation.entity.domain.User;
+import com.example.das_auth_providers.das_emulation.repository.RoleRepository;
 import com.example.das_auth_providers.das_emulation.repository.UserRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.text.MessageFormat;
-import java.util.Optional;
+import java.util.HashSet;
 
 @Service
-@AllArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Override
-    public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
-        final Optional<User> optionalUser = userRepository.findByEmail(email);
-        if (optionalUser.isPresent()) {
-            return optionalUser.get();
-        } else {
-            throw new UsernameNotFoundException(MessageFormat.format("User with email {0} cannot be found.", email));
-        }
+    public UserService(
+            final UserRepository userRepository,
+            final RoleRepository roleRepository,
+            final BCryptPasswordEncoder bCryptPasswordEncoder
+    ) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
-    
-    public void signUp(final User user) {
+
+    public void save(final User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setRoles(new HashSet<>(roleRepository.findAll()));
         userRepository.save(user);
+    }
+
+    public User findByEmail(final String email) {
+        return userRepository.findByEmail(email);
     }
 }

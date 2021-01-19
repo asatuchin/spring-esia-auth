@@ -1,6 +1,6 @@
 package com.example.das_auth_providers.common.configuration;
 
-import com.example.das_auth_providers.das_emulation.service.UserService;
+import com.example.das_auth_providers.das_emulation.service.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @AllArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserService userService;
+    private final UserDetailsServiceImpl userService;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
