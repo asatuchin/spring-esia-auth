@@ -1,6 +1,6 @@
 package com.example.das_auth_providers.das_emulation.repository;
 
-import com.example.das_auth_providers.das_emulation.entity.User;
+import com.example.das_auth_providers.das_emulation.entity.domain.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

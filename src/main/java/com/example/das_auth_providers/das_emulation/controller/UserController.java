@@ -1,6 +1,6 @@
 package com.example.das_auth_providers.das_emulation.controller;
 
-import com.example.das_auth_providers.das_emulation.entity.User;
+import com.example.das_auth_providers.das_emulation.entity.domain.User;
 import com.example.das_auth_providers.das_emulation.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;

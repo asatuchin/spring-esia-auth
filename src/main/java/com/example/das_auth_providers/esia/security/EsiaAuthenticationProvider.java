@@ -1,6 +1,6 @@
 package com.example.das_auth_providers.esia.security;
 
-import com.example.das_auth_providers.das_emulation.entity.User;
+import com.example.das_auth_providers.das_emulation.entity.domain.User;
 import com.example.das_auth_providers.esia.model.EsiaJwtPayload;
 import com.example.das_auth_providers.esia.model.EsiaOAuth2TokenResponse;
 import com.example.das_auth_providers.esia.model.EsiaSubjectData;

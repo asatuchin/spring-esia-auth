@@ -1,4 +1,4 @@
-package com.example.das_auth_providers.das_emulation.entity;
+package com.example.das_auth_providers.das_emulation.entity.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
