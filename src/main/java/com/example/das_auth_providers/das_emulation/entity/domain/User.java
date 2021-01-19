@@ -1,7 +1,6 @@
 package com.example.das_auth_providers.das_emulation.entity.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +10,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Builder
 @Entity
 @Table(name = "users")
 public class User {
@@ -20,8 +18,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String surname;
     private String email;
     private String password;
 

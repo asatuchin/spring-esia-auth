@@ -67,7 +67,10 @@ public class VKAuthProvider implements AuthenticationProvider {
             );
         }
 
-        User user = userRepository.findByEmail(link.getEmail()).orElseThrow(() -> new UsernameNotFoundException(""));
+        User user = userRepository.findByEmail(link.getEmail());
+        if (null == user) {
+            throw new UsernameNotFoundException("");
+        }
         return new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
     }
 

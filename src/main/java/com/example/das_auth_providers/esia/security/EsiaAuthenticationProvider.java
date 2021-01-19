@@ -90,7 +90,7 @@ public class EsiaAuthenticationProvider implements AuthenticationProvider {
         if (link.isPresent()) {
             Optional<User> user = userRepository.findById(link.get().getUserId());
             if (user.isPresent()) {
-                return new UsernamePasswordAuthenticationToken(user.get().getUsername(), user);
+                return new UsernamePasswordAuthenticationToken(user.get().getEmail(), user);
             }
             throw new AuthenticationServiceException("Cannot find user by ID: " + link.get().getUserId());
         } else {

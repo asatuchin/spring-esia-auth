@@ -12,13 +12,21 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SecurityService {
 
-    private AuthenticationManager authenticationManager;
-    private UserDetailsService userDetailsService;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
+
+    public SecurityService(
+            final AuthenticationManager authenticationManager,
+            final UserDetailsService userDetailsService
+    ) {
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+    }
 
     public String findLoggedInUsername() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
         if (userDetails instanceof UserDetails) {
-            return ((UserDetails)userDetails).getUsername();
+            return ((UserDetails) userDetails).getUsername();
         }
         return null;
     }
