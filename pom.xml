@@ -9,9 +9,9 @@
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>spring-esia-auth</artifactId>
+    <artifactId>das-auth-providers</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring-esia-auth</name>
+    <name>das-auth-providers</name>
     <description>Spring ESIA Auth</description>
 
     <properties>
