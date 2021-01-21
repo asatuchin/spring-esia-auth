@@ -1,11 +1,11 @@
 package com.example.das_auth_providers.vk.repository;
 
-import com.example.das_auth_providers.vk.model.domain.VKUserLink;
+import com.example.das_auth_providers.vk.entity.domain.VKUserLink;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface VKUserLinkRepository extends PagingAndSortingRepository<VKUserLink, Long>,
+public interface VKUserLinkRepository extends JpaRepository<VKUserLink, Long>,
         JpaSpecificationExecutor<VKUserLink> {
+    VKUserLink findByVkId(final String vkId);
 }

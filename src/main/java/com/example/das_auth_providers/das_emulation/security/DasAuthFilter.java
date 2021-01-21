@@ -1,4 +1,4 @@
-package com.example.das_auth_providers.common.security;
+package com.example.das_auth_providers.das_emulation.security;
 
 import org.springframework.web.filter.OncePerRequestFilter;
 

@@ -1,6 +1,6 @@
-package com.example.das_auth_providers.vk.model.specification;
+package com.example.das_auth_providers.vk.entity.specification;
 
-import com.example.das_auth_providers.vk.model.domain.VKUserLink;
+import com.example.das_auth_providers.vk.entity.domain.VKUserLink;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;

@@ -1,4 +1,4 @@
-package com.example.das_auth_providers.vk.model.domain;
+package com.example.das_auth_providers.vk.entity.domain;
 
 import lombok.*;
 

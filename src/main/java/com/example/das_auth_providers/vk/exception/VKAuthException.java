@@ -1,6 +1,6 @@
 package com.example.das_auth_providers.vk.exception;
 
-import com.example.das_auth_providers.vk.model.response.VKProfile;
+import com.example.das_auth_providers.vk.entity.response.VKProfile;
 import lombok.Getter;
 import org.springframework.security.core.AuthenticationException;
 

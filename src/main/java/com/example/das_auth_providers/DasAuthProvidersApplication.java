@@ -9,8 +9,7 @@ import org.springframework.context.annotation.FilterType;
 @ComponentScan(
         basePackages = "com.example.das_auth_providers",
         excludeFilters = {
-                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.example\\.das_auth_providers\\.esia.*"),
-                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.example\\.das_auth_providers\\.vk.*")
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.example\\.das_auth_providers\\.esia.*")
         }
 )
 public class DasAuthProvidersApplication {

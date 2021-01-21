@@ -1,4 +1,4 @@
-package com.example.das_auth_providers.vk.model.response;
+package com.example.das_auth_providers.vk.entity.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
