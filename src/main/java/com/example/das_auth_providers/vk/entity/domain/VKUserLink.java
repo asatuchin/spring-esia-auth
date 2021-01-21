@@ -17,7 +17,7 @@ public class VKUserLink {
     private long id;
 
     @Column(unique=true)
-    private String email;
-    @Column
+    private Long userId;
+    @Column(unique = true)
     private String vkId;
 }

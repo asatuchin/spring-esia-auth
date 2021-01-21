@@ -22,26 +22,41 @@
         <spring:bind path="email">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="text" path="email" class="form-control" placeholder="Email"
-                            autofocus="true"></form:input>
-                <form:errors path="email"></form:errors>
+                            autofocus="true"/>
+                <form:errors path="email"/>
             </div>
         </spring:bind>
 
         <spring:bind path="password">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="password" path="password" class="form-control" placeholder="Password"></form:input>
-                <form:errors path="password"></form:errors>
+                <form:input type="password" path="password" class="form-control" placeholder="Password"/>
+                <form:errors path="password"/>
             </div>
         </spring:bind>
 
         <spring:bind path="passwordConfirm">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="password" path="passwordConfirm" class="form-control"
-                            placeholder="Confirm your password"></form:input>
-                <form:errors path="passwordConfirm"></form:errors>
+                            placeholder="Confirm your password"/>
+                <form:errors path="passwordConfirm"/>
             </div>
         </spring:bind>
 
+        <spring:bind path="thirdPartyProvider">
+            <div>
+                <form:input type="hidden"
+                            path="thirdPartyProvider"
+                            value="${param.third_party_provider}"/>
+            </div>
+        </spring:bind>
+
+        <spring:bind path="thirdPartyId">
+            <div>
+                <form:input type="hidden"
+                            path="thirdPartyId"
+                            value="${param.third_party_id}"/>
+            </div>
+        </spring:bind>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
     </form:form>
 

@@ -1,9 +1,8 @@
 package com.example.das_auth_providers.common.exception;
 
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.access.AccessDeniedException;
 
-public class RedirectRequiredException extends BadCredentialsException {
+public class RedirectRequiredException extends AccessDeniedException {
     private final String redirectUri;
 
     public RedirectRequiredException(final String redirectUri) {

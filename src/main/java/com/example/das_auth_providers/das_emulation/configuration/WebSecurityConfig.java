@@ -1,6 +1,6 @@
 package com.example.das_auth_providers.das_emulation.configuration;
 
-import com.example.das_auth_providers.das_emulation.security.DasAuthFailureHandler;
+import com.example.das_auth_providers.das_emulation.security.DasAuthFailureEntryPoint;
 import com.example.das_auth_providers.das_emulation.security.DasAuthFilter;
 import com.example.das_auth_providers.das_emulation.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.util.List;
@@ -29,19 +28,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final List<DasAuthFilter> authFilters;
     private final List<AuthenticationProvider> authProviders;
 
+    private final DasAuthFailureEntryPoint accessDeniedHandler;
+
+    private final PasswordEncoder bCryptPasswordEncoder;
+
     WebSecurityConfig(
             final UserDetailsServiceImpl userDetailsService,
             final List<DasAuthFilter> authFilters,
-            final List<AuthenticationProvider> authProviders
+            final List<AuthenticationProvider> authProviders,
+            final DasAuthFailureEntryPoint accessDeniedHandler,
+            final PasswordEncoder bCryptPasswordEncoder
     ) {
         this.userDetailsService = userDetailsService;
         this.authFilters = authFilters;
         this.authProviders = authProviders;
-    }
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+        this.accessDeniedHandler = accessDeniedHandler;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -52,20 +54,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-//                .failureHandler(authenticationFailureHandler())
                 .loginPage("/login")
-                .defaultSuccessUrl("/welcome")
                 .permitAll()
                 .and()
                 .logout()
-                .permitAll();
+                .permitAll()
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler);
         authFilters.forEach(f -> http.addFilterAfter(f, BasicAuthenticationFilter.class));
         authProviders.forEach(http::authenticationProvider);
-    }
-
-    @Bean
-    public AuthenticationFailureHandler authenticationFailureHandler() {
-        return new DasAuthFailureHandler();
     }
 
     @Bean
@@ -77,6 +75,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 }
