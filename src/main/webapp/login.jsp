@@ -31,6 +31,7 @@
             <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
             <h4 class="text-center"><a href="${contextPath}/registration">Create an account</a></h4>
             <h4 class="text-center"><a href="${contextPath}/vk/login?redirect_uri=${contextPath}/login">Login via VK</a></h4>
+            <h4 class="text-center"><a href="${contextPath}/esia/login?redirect_uri=${contextPath}/login">Login via ESIA</a></h4>
         </div>
     </form>
 </div>

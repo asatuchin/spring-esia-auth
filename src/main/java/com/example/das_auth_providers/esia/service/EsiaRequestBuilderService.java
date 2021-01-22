@@ -1,11 +1,16 @@
 package com.example.das_auth_providers.esia.service;
 
-import com.example.das_auth_providers.esia.model.EsiaOAuth2TokenRequest;
+import com.example.das_auth_providers.esia.exception.EsiaClientSecretException;
+import com.example.das_auth_providers.esia.exception.EsiaSignatureException;
+import com.example.das_auth_providers.esia.model.ESIAParameters;
+import com.example.das_auth_providers.esia.model.api.EsiaOAuth2TokenRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
+import java.security.SignatureException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -13,40 +18,35 @@ import java.util.UUID;
 @Service
 public class EsiaRequestBuilderService {
 
-    private final static String CLIENT_ID = "client_id";
-    private final static String CLIENT_SECRET = "client_secret";
-    private final static String REDIRECT_URI = "redirect_uri";
-    private final static String SCOPE = "scope";
-    private final static String RESPONSE_TYPE = "response_type";
-    private final static String STATE = "state";
-    private final static String TIMESTAMP = "timestamp";
-
-    private static final SimpleDateFormat SQL_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    @Value("${esia.authorization.redirect_url}")
-    private String redirectUrl;
-
-    @Value("${esia.authorization.code_url}")
-    private String authorizationCodeUrl;
-
-    @Value("${esia.authorization.token_url}")
-    private String tokenUrl;
-
-    @Value("${esia.authorization.clientId}")
-    private String clientId;
-
-    @Value("${esia.authorization.scope}")
-    private String scope;
+    private static final SimpleDateFormat ESIA_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final String CODE_RESPONSE_TYPE_VAL = "code";
 
     private final EsiaSignatureService signatureService;
 
+    private final URI authUri;
+    private final URI authCallbackUri;
+    private final URI accessTokenUri;
+
+    private final String clientId;
+    private final String scope;
+
     public EsiaRequestBuilderService(
-            final EsiaSignatureService signatureService
+            final EsiaSignatureService signatureService,
+            final @Value("${esia.api.method_uri.auth_code}") URI authUri,
+            final @Value("${security.auth.third-party.callback-uri}") URI authCallbackUri,
+            final @Value("${esia.api.method_uri.access_token}") URI tokenUrl,
+            final @Value("${esia.api.security.client_id}") String clientId,
+            final @Value("${esia.api.security.scope}") String scope
     ) {
         this.signatureService = signatureService;
+        this.authUri = authUri;
+        this.authCallbackUri = authCallbackUri;
+        this.accessTokenUri = tokenUrl;
+        this.clientId = clientId;
+        this.scope = scope;
     }
 
-    private String getAuthorizationUrl() {
+    public String getAuthorizationUrl() throws EsiaSignatureException {
         String timeStamp = this.getTimeStamp();
         String state = UUID.randomUUID().toString();
         String message = scope + timeStamp + clientId + state;
@@ -54,37 +54,41 @@ public class EsiaRequestBuilderService {
         String clientSecret = signatureService.sign(message);
 
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>() {{
-            add(CLIENT_ID, clientId);
-            add(CLIENT_SECRET, clientSecret);
-            add(REDIRECT_URI, redirectUrl);
-            add(SCOPE, scope);
-            add(RESPONSE_TYPE, "code");
-            add(STATE, state);
-            add(TIMESTAMP, timeStamp);
+            add(ESIAParameters.CLIENT_ID, clientId);
+            add(ESIAParameters.CLIENT_SECRET, clientSecret);
+            add(ESIAParameters.REDIRECT_URI, authCallbackUri.toString());
+            add(ESIAParameters.SCOPE, scope);
+            add(ESIAParameters.RESPONSE_TYPE, CODE_RESPONSE_TYPE_VAL);
+            add(ESIAParameters.STATE, state);
+            add(ESIAParameters.TIMESTAMP, timeStamp);
         }};
-        return UriComponentsBuilder.fromUriString(authorizationCodeUrl)
+        return UriComponentsBuilder.fromUri(authUri)
                 .queryParams(params)
                 .toUriString();
     }
 
-    public String getTokenUrl(final String code) {
-        return tokenUrl;
+    public URI getTokenUrl() {
+        return accessTokenUri;
     }
 
-
-    public EsiaOAuth2TokenRequest getTokenRequest(final String code) {
+    public EsiaOAuth2TokenRequest getTokenRequest(final String code) throws EsiaClientSecretException {
         String timeStamp = this.getTimeStamp();
         String state = UUID.randomUUID().toString();
         String message = scope + timeStamp + clientId + state;
 
-        String clientSecret = signatureService.sign(message);
+        String clientSecret = null;
+        try {
+            clientSecret = signatureService.sign(message);
+        } catch (EsiaSignatureException e) {
+            throw new EsiaClientSecretException("Failed to create client secret", e);
+        }
 
         return EsiaOAuth2TokenRequest.builder()
                 .clientId(clientId)
                 .clientSecret(clientSecret)
-                .grantType("authorization_code")
+                .grantType(ESIAParameters.AUTH_CODE)
                 .code(code)
-                .redirectUri(redirectUrl)
+                .redirectUri(authCallbackUri.toString())
                 .scope(scope)
                 .state(state)
                 .timestamp(timeStamp)
@@ -92,6 +96,6 @@ public class EsiaRequestBuilderService {
     }
 
     private String getTimeStamp() {
-        return SQL_DATE_FORMAT.format(new Date());
+        return ESIA_DATE_FORMAT.format(new Date());
     }
 }

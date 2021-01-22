@@ -1,20 +1,13 @@
 package com.example.das_auth_providers.esia.security;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Collection;
 import java.util.Collections;
 
-public class EsiaAuthorizationCodeAuthToken extends AbstractAuthenticationToken {
+public class EsiaAuthCodeToken extends AbstractAuthenticationToken {
     private final String code;
 
-    public EsiaAuthorizationCodeAuthToken(String code, Collection<? extends GrantedAuthority> authorities) {
-        super(authorities);
-        this.code = code;
-    }
-
-    public EsiaAuthorizationCodeAuthToken(String code) {
+    public EsiaAuthCodeToken(final String code) {
         super(Collections.emptyList());
         this.code = code;
     }
@@ -26,6 +19,10 @@ public class EsiaAuthorizationCodeAuthToken extends AbstractAuthenticationToken 
 
     @Override
     public Object getPrincipal() {
+        return null;
+    }
+
+    public String getCode() {
         return code;
     }
 }

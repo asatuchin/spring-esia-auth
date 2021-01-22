@@ -1,4 +1,4 @@
-package com.example.das_auth_providers.esia.model;
+package com.example.das_auth_providers.esia.model.api;
 
 import lombok.Builder;
 import lombok.Value;

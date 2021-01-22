@@ -1,12 +1,11 @@
 package com.example.das_auth_providers.esia.service;
 
 import com.example.das_auth_providers.das_emulation.exception.JwtParsingException;
-import com.example.das_auth_providers.esia.model.EsiaJwtHeader;
-import com.example.das_auth_providers.esia.model.EsiaJwtPayload;
-import com.example.das_auth_providers.esia.model.EsiaOAuth2TokenResponse;
+import com.example.das_auth_providers.esia.model.api.jwt.EsiaJwtHeader;
+import com.example.das_auth_providers.esia.model.api.jwt.EsiaJwtPayload;
+import com.example.das_auth_providers.esia.model.api.EsiaOAuth2TokenResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import org.bouncycastle.cms.*;
 import org.bouncycastle.cms.jcajce.JcaSimpleSignerInfoVerifierBuilder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -23,17 +22,24 @@ import java.util.Base64;
 import java.util.Collections;
 
 @Service
-@AllArgsConstructor
 public class EsiaIdentityValidationService {
-
-    @Value("${esia.jwt.issuer}")
-    final String validTokenIssuer;
-
-    @Value("${esia.jwt.client}")
-    final String validTokenClient;
 
     private final EsiaCertificateStorage certStorage;
     private final ObjectMapper objectMapper;
+    private final String validTokenIssuer;
+    private final String validTokenClient;
+
+    public EsiaIdentityValidationService(
+            final EsiaCertificateStorage certStorage,
+            final ObjectMapper objectMapper,
+            final @Value("${esia.jwt.issuer}") String validTokenIssuer,
+            final @Value("${esia.jwt.client}") String validTokenClient
+    ) {
+        this.certStorage = certStorage;
+        this.objectMapper = objectMapper;
+        this.validTokenIssuer = validTokenIssuer;
+        this.validTokenClient = validTokenClient;
+    }
 
     public void validateIdentityToken(final EsiaOAuth2TokenResponse token) throws JwtValidationException {
         try {

@@ -70,32 +70,4 @@ public class VKAuthRequestFilter extends DasAuthFilter {
         Authentication auth = context.getAuthentication();
         return auth == null || auth instanceof AnonymousAuthenticationToken || !auth.isAuthenticated();
     }
-
-    private boolean matchesAuthorizationResponse(HttpServletRequest request) {
-        if (!isAuthorizationResponse(request)) {
-            return false;
-        } else {
-//            OAuth2AuthorizationRequest authorizationRequest = this.authorizationRequestRepository.loadAuthorizationRequest(request);
-//            if (authorizationRequest == null) {
-//                return false;
-//            } else {
-//                UriComponents requestUri = UriComponentsBuilder.fromUriString(UrlUtils.buildFullRequestUrl(request)).build();
-//                UriComponents redirectUri = UriComponentsBuilder.fromUriString(authorizationRequest.getRedirectUri()).build();
-//                Set<Map.Entry<String, List<String>>> requestUriParameters = new LinkedHashSet(requestUri.getQueryParams().entrySet());
-//                Set<Map.Entry<String, List<String>>> redirectUriParameters = new LinkedHashSet(redirectUri.getQueryParams().entrySet());
-//                requestUriParameters.retainAll(redirectUriParameters);
-//                return Objects.equals(requestUri.getScheme(), redirectUri.getScheme()) && Objects.equals(requestUri.getUserInfo(), redirectUri.getUserInfo()) && Objects.equals(requestUri.getHost(), redirectUri.getHost()) && Objects.equals(requestUri.getPort(), redirectUri.getPort()) && Objects.equals(requestUri.getPath(), redirectUri.getPath()) && Objects.equals(requestUriParameters.toString(), redirectUriParameters.toString());
-//            }
-            return true;
-        }
-    }
-
-    private boolean isAuthorizationResponse(HttpServletRequest request) {
-        return true;
-    }
-
-    private void processAuthorizationResponse(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        //
-//        this.redirectStrategy.sendRedirect(request, response, "https://localhost:8080");
-    }
 }
